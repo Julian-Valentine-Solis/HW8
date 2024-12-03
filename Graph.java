@@ -1,6 +1,7 @@
+
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Julian Solis / 001
  *
  *   Note, additional comments provided throughout this source code
  *   is for educational purposes
@@ -11,20 +12,20 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-
 /**
- *  Graph traversal exercise
+ * Graph traversal exercise
  *
- *  The Graph class is a representing an oversimplified Directed Graph of vertices
- *  (nodes) and edges. The graph is stored in an adjacency list
+ * The Graph class is a representing an oversimplified Directed Graph of
+ * vertices
+ * (nodes) and edges. The graph is stored in an adjacency list
  */
 
 public class Graph {
-  int numVertices;                  // vertices in graph
+  int numVertices; // vertices in graph
   LinkedList<Integer>[] adjListArr; // Adjacency list
-  List<Integer> vertexValues;       // vertex values
+  List<Integer> vertexValues; // vertex values
 
-  // Constructor 
+  // Constructor
   public Graph(int numV) {
     numVertices = numV;
     adjListArr = new LinkedList[numVertices];
@@ -40,17 +41,16 @@ public class Graph {
    * method setValue
    * 
    * Sets a vertex's (node's) value.
-   */ 
-  
+   */
+
   public void setValue(int vertexIndex, int value) {
     if (vertexIndex >= 0 && vertexIndex < numVertices) {
       vertexValues.set(vertexIndex, value);
     } else {
       throw new IllegalArgumentException(
-             "Invalid vertex index: " + vertexIndex);
+          "Invalid vertex index: " + vertexIndex);
     }
   }
-
 
   public void addEdge(int src, int dest) {
     adjListArr[src].add(dest);
@@ -60,11 +60,11 @@ public class Graph {
    * method printGraph
    * 
    * Prints the graph as an adjacency matrix
-   */ 
-  
+   */
+
   public void printGraph() {
     System.out.println(
-         "\nAdjacency Matrix Representation:\n");
+        "\nAdjacency Matrix Representation:\n");
     int[][] matrix = new int[numVertices][numVertices];
 
     for (int i = 0; i < numVertices; i++) {
@@ -92,7 +92,6 @@ public class Graph {
     }
   }
 
-
   /**
    * method findRoot
    *
@@ -101,10 +100,37 @@ public class Graph {
    * and/or more than one root vertex, then return -1.
    * 
    */
-  
-  public int findRoot() {
 
-    // ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME/SECTION AT TOP OF FILE
-    return -1;
-  } 
+  public int findRoot() {
+    // Initialize an array to track the number of incoming edges for each vertex
+    int[] edgeCounter = new int[numVertices];
+
+    // Count incoming edges for each vertex
+    for (int i = 0; i < numVertices; i++) {
+      for (int neighbor : adjListArr[i]) {
+        edgeCounter[neighbor]++;
+      }
+    }
+
+    int indexOfRoot = -1; // Variable to track the index of the root vertex
+
+    // Check for vertices with zero incoming edges
+    for (int i = 0; i < numVertices; i++) {
+      if (edgeCounter[i] == 0) { // Found a vertex with no incoming edges
+        if (indexOfRoot != -1) {
+          // If a second root vertex is found, return -1 (no unique root exists)
+          return -1;
+        }
+        indexOfRoot = i;
+      }
+    }
+
+    // If no root was found, return -1
+    if (indexOfRoot == -1) {
+      return -1;
+    }
+
+    // Return the value of the root vertex
+    return vertexValues.get(indexOfRoot);
+  }
 }
